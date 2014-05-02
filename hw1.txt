@@ -1,0 +1,30 @@
+
+var http = require("http");
+var request = require("request");
+
+var port = 1337;
+var url = "http://graph.facebook.com/ZacEfron/photos?type=uploaded";
+
+http.createServer(function(req,res){
+
+    res.writeHeader(200, {"Content-Type": "text/html"});
+    
+    var data = "<html><head></head><body><center><table border='0' cellspacing='15' cellpadding ='10'></center><td width=180 rowspan=30 bgcolor=black valign=top style='border-radius:13px;'><font face='Segoe UI Symbol' color='white' size='90'>Z<br>A<br>C<p>E<br>F<br>R<br>O<br>N</br></font></td><td align=center bgcolor='black' style='border-radius:13px;'><font face='Lucida Calligraphy' color='white' size='6'><b>Photo Collection</b></font></td><tr>";
+
+    request.get(url,function(err,body,result){
+    result = JSON.parse(result);
+    
+    result.data.forEach(function(val,idx){
+        data += "<td style='border:12px black double;border-radius:13px;'><img src='" + val.images[2].source+ "' width=700 style='border-radius:13px;'></td><tr>";
+    })
+    
+    data += "</table></body></html>"
+    res.end(data);
+    })
+    ;
+
+
+}
+).listen(port);
+
+console.log("start server create: " + port);
